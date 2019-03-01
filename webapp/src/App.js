@@ -13,6 +13,7 @@ class App extends Component {
     this.state = {
       show: false,
       errorMessage: '',
+      errorFavoritesMessage: '',
       username: '',
       bio: '',
       avatar_url: '',
@@ -20,11 +21,22 @@ class App extends Component {
       html_url: '',
       id: 0,
       input: '',
+      favoriteUsers: [],
     };
 
+    this.URL = 'http://localhost:4000/api/users/';
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
+
+  componentDidMount() {
+    Axios.get(this.URL).then(({ data }) => {
+      this.setState({favoriteUsers: data})
+    }).catch(() => {
+      this.setState({ errorFavoritesMessage: 'You have not added any favorites yet' });
+    });
+  }
+
 
   handleChange(event) {
     const { name, value } = event.target;
@@ -34,7 +46,7 @@ class App extends Component {
   handleSubmit(event) {
     event.preventDefault();
     const { input } = this.state;
-    Axios.get('http://localhost:4000/api/users/' + input).then(({ data }) => {
+    Axios.get(this.URL + input).then(({ data }) => {
       this.setState({
         show: true,
         id: data.id,
@@ -52,7 +64,8 @@ class App extends Component {
 
   render() {
     let views;
-    if (this.state.show) {
+    const { show, favoriteUsers, errorMessage, errorFavoritesMessage } = this.state;
+    if (show) {
       views = <UserInformation {...this.state}/>
     } else {
       views = <div/>;
@@ -65,10 +78,14 @@ class App extends Component {
           <form onSubmit={this.handleSubmit}>
             <input name="input" onChange={this.handleChange} type="text"/>
             {views}
-            <p>{this.state.errorMessage}</p>
+            <p>{errorMessage}</p>
           </form>
         </div>
         <h1>Favorites</h1>
+        {favoriteUsers.map(users => (
+          <UserInformation {...users}/>
+        ))}
+        <p>{errorFavoritesMessage}</p>
       </div>
     );
   }
