@@ -18,6 +18,8 @@ class App extends Component {
       avatar_url: '',
       name: '',
       html_url: '',
+      id: 0,
+      input: '',
     };
 
     this.handleChange = this.handleChange.bind(this);
@@ -31,10 +33,11 @@ class App extends Component {
 
   handleSubmit(event) {
     event.preventDefault();
-    const { username } = this.state;
-    Axios.get('http://localhost:4000/api/users/' + username).then(({ data }) => {
+    const { input } = this.state;
+    Axios.get('http://localhost:4000/api/users/' + input).then(({ data }) => {
       this.setState({
         show: true,
+        id: data.id,
         username: data.login,
         bio: data.bio,
         avatar_url: data.avatar_url,
@@ -60,12 +63,12 @@ class App extends Component {
         <div className={styles.div}>
           <h2>Enter username that you would like to find on Github:</h2>
           <form onSubmit={this.handleSubmit}>
-            <label id="label">Enter Username</label>
-            <input name="username" onChange={this.handleChange} type="text"/>
+            <input name="input" onChange={this.handleChange} type="text"/>
             {views}
             <p>{this.state.errorMessage}</p>
           </form>
         </div>
+        <h1>Favorites</h1>
       </div>
     );
   }
