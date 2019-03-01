@@ -1,0 +1,14 @@
+img {
+    height: 200px;
+    width: 200px;
+}
+
+.div {
+    display: flex;
+    border: 5px solid black;
+    margin-top: 20px;
+}
+
+.div .text {
+    margin-left: 30px;
+}
