@@ -16,4 +16,6 @@ img {
 .div .button {
     height: 50px;
     margin: auto 40px;
+    color: white;
+    background-color: #333333;
 }

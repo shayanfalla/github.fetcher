@@ -38,7 +38,10 @@ public class FetchService {
     Iterable<GithubUser> iterable = repository.findAll();
     List<GithubUser> githubUsers = new ArrayList<>();
     iterable.forEach(githubUsers::add);
-    System.out.println(iterable.iterator().next());
     return githubUsers;
+  }
+
+  public void deleteFavorite(Long id) {
+    repository.deleteById(id);
   }
 }

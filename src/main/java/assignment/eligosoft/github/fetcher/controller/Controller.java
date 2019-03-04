@@ -29,9 +29,19 @@ public class Controller {
   }
 
   @PostMapping("/users")
-  public ResponseEntity setFavorites(@RequestBody GithubUser user) {
+  public ResponseEntity setFavorite(@RequestBody GithubUser user) {
     try {
       fetchService.saveFavorites(user);
+      return ok().build();
+    } catch (Exception e) {
+      return badRequest().build();
+    }
+  }
+
+  @DeleteMapping("/users/{id}")
+  public ResponseEntity deleteFavorite(@PathVariable Long id) {
+    try {
+      fetchService.deleteFavorite(id);
       return ok().build();
     } catch (Exception e) {
       return badRequest().build();

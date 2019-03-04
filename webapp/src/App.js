@@ -3,18 +3,18 @@ import Axios from 'axios';
 import Header from "./components/Header";
 import styles from './App.css';
 import UserInformation from "./components/UserInformation";
+import GitHubUser from "./model/GitHubUser";
 
 class App extends Component {
-  login;
 
   constructor(props) {
     super(props);
 
     this.state = {
-      show: false,
+      showUserInfo: false,
       errorMessage: '',
       errorFavoritesMessage: '',
-      username: '',
+      login: '',
       bio: '',
       avatar_url: '',
       name: '',
@@ -27,13 +27,15 @@ class App extends Component {
     this.URL = 'http://localhost:4000/api/users/';
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.saveUserAsFavorite = this.saveUserAsFavorite.bind(this);
+    this.removeUserAsFavorite = this.removeUserAsFavorite.bind(this);
   }
 
   componentDidMount() {
     Axios.get(this.URL).then(({ data }) => {
-      this.setState({favoriteUsers: data})
+      this.setState({ favoriteUsers: data, errorFavoritesMessage: '' })
     }).catch(() => {
-      this.setState({ errorFavoritesMessage: 'You have not added any favorites yet' });
+      this.setState({ errorFavoritesMessage: 'You have not added any favorites yet.' });
     });
   }
 
@@ -48,9 +50,9 @@ class App extends Component {
     const { input } = this.state;
     Axios.get(this.URL + input).then(({ data }) => {
       this.setState({
-        show: true,
+        showUserInfo: true,
         id: data.id,
-        username: data.login,
+        login: data.login,
         bio: data.bio,
         avatar_url: data.avatar_url,
         name: data.name,
@@ -58,18 +60,43 @@ class App extends Component {
         errorMessage: '',
       })
     }).catch(() => {
-      this.setState({ show: false, errorMessage: 'A user with that username could not be found!' });
+      this.setState({ showUserInfo: false, errorMessage: 'A user with that username could not be found!' });
     })
   }
 
-  render() {
-    let views;
-    const { show, favoriteUsers, errorMessage, errorFavoritesMessage } = this.state;
-    if (show) {
-      views = <UserInformation {...this.state}/>
+  saveUserAsFavorite() {
+    const userData = new GitHubUser(this.state);
+    Axios.post(this.URL, userData.parseToJson()).then(() => {
+      this.componentDidMount();
+    }).catch(() => {
+      this.setState({ errorMessage: "Couldn't save user, something went wrong..." });
+    });
+  }
+
+  removeUserAsFavorite(id) {
+    Axios.delete(this.URL + id).then(() => {
+      this.componentDidMount();
+    }).catch(() => {
+      this.setState({ errorFavoritesMessage: "Couldn't delete user, something went wrong..." });
+    });
+  }
+
+  showInformation() {
+    const { showUserInfo } = this.state;
+    const method = this.saveUserAsFavorite;
+    const state = { ...this.state, method, text: 'Set as Favorite' };
+    if (showUserInfo) {
+      return <UserInformation {...state}/>
     } else {
-      views = <div/>;
+      return <div/>
     }
+  }
+
+  render() {
+    const views = this.showInformation();
+    const { favoriteUsers, errorMessage, errorFavoritesMessage } = this.state;
+    const method = this.removeUserAsFavorite;
+
     return (
       <div>
         <Header/>
@@ -82,9 +109,12 @@ class App extends Component {
           </form>
         </div>
         <h1>Favorites</h1>
-        {favoriteUsers.map(users => (
-          <UserInformation {...users}/>
-        ))}
+        {favoriteUsers.map((user, index) => {
+          const users = { ...user, method, text: 'Unfavorite' };
+          return (
+            <UserInformation key={index} {...users}/>
+          )
+        })}
         <p>{errorFavoritesMessage}</p>
       </div>
     );

@@ -8,7 +8,7 @@ public class GithubUser {
 
   @Id
   private Long id;
-  private String username;
+  private String login;
   private String bio;
   private String avatar_url;
   private String name;
@@ -25,12 +25,12 @@ public class GithubUser {
     this.id = id;
   }
 
-  public String getUsername() {
-    return username;
+  public String getLogin() {
+    return login;
   }
 
-  public void setUsername(String username) {
-    this.username = username;
+  public void setLogin(String login) {
+    this.login = login;
   }
 
   public String getBio() {
