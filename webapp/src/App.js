@@ -20,7 +20,6 @@ class App extends Component {
       name: '',
       html_url: '',
       id: 0,
-      input: '',
       favoriteUsers: [],
     };
 
@@ -33,7 +32,7 @@ class App extends Component {
 
   componentDidMount() {
     Axios.get(this.URL).then(({ data }) => {
-      this.setState({ favoriteUsers: data, errorFavoritesMessage: '' })
+      this.setState({ favoriteUsers: data, errorFavoritesMessage: '', showUserInfo: false })
     }).catch(() => {
       this.setState({ errorFavoritesMessage: 'You have not added any favorites yet.' });
     });
@@ -83,8 +82,8 @@ class App extends Component {
 
   showInformation() {
     const { showUserInfo } = this.state;
-    const method = this.saveUserAsFavorite;
-    const state = { ...this.state, method, text: 'Set as Favorite' };
+    const userHandler = this.saveUserAsFavorite;
+    const state = { ...this.state, userHandler, text: 'Set as Favorite' };
     if (showUserInfo) {
       return <UserInformation {...state}/>
     } else {
@@ -95,7 +94,7 @@ class App extends Component {
   render() {
     const views = this.showInformation();
     const { favoriteUsers, errorMessage, errorFavoritesMessage } = this.state;
-    const method = this.removeUserAsFavorite;
+    const userHandler = this.removeUserAsFavorite;
 
     return (
       <div>
@@ -110,7 +109,7 @@ class App extends Component {
         </div>
         <h1>Favorites</h1>
         {favoriteUsers.map((user, index) => {
-          const users = { ...user, method, text: 'Unfavorite' };
+          const users = { ...user, userHandler, text: 'Unfavorite' };
           return (
             <UserInformation key={index} {...users}/>
           )

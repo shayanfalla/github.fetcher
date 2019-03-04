@@ -12,7 +12,7 @@ const UserInformation = (state) => {
         <p>{state.bio}</p>
         <p><a href={state.html_url} target="_blank" rel="noopener noreferrer">Link to Github</a></p>
       </div>
-      <button className="button" onClick={() => state.method(state.id)}>{state.text}</button>
+      <button type="button" className="button" onClick={() => state.userHandler(state.id)}>{state.text}</button>
     </div>
   );
 };
