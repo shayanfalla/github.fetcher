@@ -1,6 +1,6 @@
 # Github User Fetcher
 
-A simple software that allows the user to fetch GitHub users and then save them as favourites.
+A simple software that allows the user to fetch GitHub users and save them as favourites if wished.
 
 ## Before running
 
