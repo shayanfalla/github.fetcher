@@ -63,8 +63,20 @@ class App extends Component {
     })
   }
 
+  checkFavorite(id) {
+    const { favoriteUsers } = this.state;
+    for (let i = 0; i < favoriteUsers.length; i++) {
+      if (favoriteUsers[i].id === id) return true;
+    }
+    return false;
+  }
+
   saveUserAsFavorite() {
     const userData = new GitHubUser(this.state);
+    if (this.checkFavorite(userData.id)) {
+      this.setState({ errorMessage: 'This user is already one of your favorites!' });
+      return;
+    }
     Axios.post(this.URL, userData.parseToJson()).then(() => {
       this.componentDidMount();
     }).catch(() => {
