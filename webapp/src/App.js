@@ -40,7 +40,6 @@ class App extends Component {
     });
   }
 
-
   handleChange(event) {
     const { name, value } = event.target;
     this.setState({ [name]: value });
@@ -82,7 +81,7 @@ class App extends Component {
     Axios.post(this.URL, userData.parseToJson()).then(() => {
       this.componentDidMount();
     }).catch(() => {
-      this.setState({ errorMessage: "Couldn't save user, something went wrong..." });
+      this.setState({ errorMessage: 'Couldn\'t save user, something went wrong...' });
     });
   }
 
@@ -90,7 +89,7 @@ class App extends Component {
     Axios.delete(this.URL + id).then(() => {
       this.componentDidMount();
     }).catch(() => {
-      this.setState({ errorFavoritesMessage: "Couldn't delete user, something went wrong..." });
+      this.setState({ errorFavoritesMessage: 'Couldn\'t delete user, something went wrong...' });
     });
   }
 
