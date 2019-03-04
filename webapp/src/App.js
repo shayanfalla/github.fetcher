@@ -20,6 +20,7 @@ class App extends Component {
       name: '',
       html_url: '',
       id: 0,
+      input: '',
       favoriteUsers: [],
     };
 
