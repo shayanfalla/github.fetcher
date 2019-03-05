@@ -13,8 +13,10 @@ For this project, a couple of tools are needed. These are:
 ## How to run the project
 
 Do the following:
- 1. Run `mvn spring-boot:run` in the root directory (`.../github.fetcher`)
- 2. Once that is done, run `yarn start` in the webapp folder (`.../github.fetcher/webapp`)
+ 1. Run `mvn clean install` in the root directory (`.../github.fetcher`)
+ 2. Run `mvn spring-boot:run` in the root directory (`.../github.fetcher`)
+ 3. Run `yarn install` in the webapp folder (`.../github.fetcher/webapp`)
+ 4. Once that is done, run `yarn start` in the webapp folder (`.../github.fetcher/webapp`)
 
  If these steps have been followed correctly without any errors, a webpage with the url `localhost:8080` should pop of with the service.
 
